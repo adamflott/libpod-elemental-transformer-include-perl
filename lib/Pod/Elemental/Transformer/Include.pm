@@ -29,19 +29,23 @@ sub transform_node {
         given ($action) {
             when (/^include_cmd:/) {
                 my $cmd = $child->content;
-                $cmd =~ s/^include_cmd://;
-                #say("cmd: $cmd");
+                $cmd =~ /^include_cmd:(\s*)/;
+                my $ws = $1 || '';
+                $cmd =~ s/^include_cmd:\s*//;
+                #say("cmd:$ws$cmd");
                 $cmd = cwd() . '/' . $cmd;
                 @output = qx($cmd);
-                $child->content(join('    ', @output));
+                $child->content($ws . join($ws, @output));
             }
             when (/^include_file:/) {
                 my $filename = $child->content;
+                $filename =~ /^include_file:(\s*)/;
+                my $ws = $1 || '';
                 $filename =~ s/^include_file:\s*//;
                 $filename = catfile(cwd(), $filename);
-                say("file: $filename");
-                my $output = slurp($filename, 'err_mode' => 'carp');
-                $child->content($output);
+                #say("file:$ws$filename");
+                my @output = slurp($filename, 'err_mode' => 'carp');
+                $child->content($ws . join($ws, @output));
             }
         }
     }
@@ -59,14 +63,32 @@ A simple way to include files and output of commands in POD via L<Pod::Weaver>.
 
     include_file:header.txt
 
-    include_cmd:ls
+        include_cmd:ls
+
+    include_cmd:blah
 
     include_file:footer.txt
 
 =head1 USING
 
 There are two supported identifiers C<include_file:> and C<include_cmd:>. They
-must be placed at the beginning of the line.
+must be placed at the beginning of the line optionally followed by white
+space. When there is white space then the every line of output included will be
+prefixed with that same amount of white space. For example,
+
+    include_cmd:echo no white space
+
+becomes,
+
+    no white space
+
+Where as,
+
+    include_cmd:    echo 4 spaces
+
+becomes,
+
+        4 spaces
 
 Errors are not fatal. But, you will see if something failed by prints to
 standard output.
