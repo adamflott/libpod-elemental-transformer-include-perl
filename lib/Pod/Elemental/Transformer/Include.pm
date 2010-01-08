@@ -5,8 +5,6 @@ use warnings;
 
 use 5.10.0;
 
-our $VERSION = '1.0';
-
 use Cwd;
 use File::Spec::Functions;
 
@@ -131,3 +129,23 @@ Then insider your F<dist.ini>,
 And now,
 
     $ dzil build
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Pod::Elemental::Transformer::Include
+
+You can also look for information at:
+
+=over
+
+=item * RT: CPAN's request tracker: L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pod-Elemental-Transformer-Include>
+
+=item * AnnoCPAN: Annotated CPAN documentation: L<http://annocpan.org/dist/Pod-Elemental-Transformer-Include>
+
+=item * CPAN Ratings: L<http://cpanratings.perl.org/d/Pod-Elemental-Transformer-Include>
+
+=item * Search CPAN: L<http://search.cpan.org/dist/Pod-Elemental-Transformer-Include>
+
+=back
